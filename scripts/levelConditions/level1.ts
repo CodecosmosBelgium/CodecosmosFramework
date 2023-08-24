@@ -1,5 +1,5 @@
 import { BlockType, MinecraftBlockTypes, Vector3 } from "@minecraft/server";
-import { LevelCondition } from "./levelTypes";
+import { LevelCondition } from "../levelTypes";
 
 let level1Conditions: LevelCondition = {
   conditions: [

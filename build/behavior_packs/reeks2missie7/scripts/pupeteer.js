@@ -24,6 +24,11 @@ class Pupeteer {
             this.clearTitle();
         }, duration);
     }
+    setTitle(message) {
+        this.world.getPlayers().forEach((player) => {
+            player.onScreenDisplay.setTitle(message);
+        });
+    }
     updateSubtitle(message) {
         this.world.getPlayers().forEach((player) => {
             player.onScreenDisplay.updateSubtitle(message);

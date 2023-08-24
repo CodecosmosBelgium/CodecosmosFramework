@@ -47,3 +47,17 @@ In the same folder change the manifest.json to match your needs.
 > `note`: this whole folder will be copied to the development_behavior_packs folder located at `%appdata%\Minecraft Education Edition\games\com.mojang\development_behavior_packs`
 
 and if there is a resource_packs folder it will also be copied to the corresponding folder.
+
+# World settings
+
+Because education chose to be anoying (huge shock i know) you have to enable the js api manually through editing the world settings with nbt.
+
+see a guide [here](https://wiki.bedrock.dev/nbt/experimental-education-edition.html)
+
+# Debugging
+
+To enable the conent log you have to enable the content log in the education settings.
+Open `%appdata%\Minecraft Education Edition\games\com.mojang\minecraftpe\options.txt` and change `content_log_file` and `content_log_gui` to `1`.
+Than ingame you can CTRL+H to open the content log.
+
+> Note: it would be advised to change the keyboard settings because H defaults to show the tutorial witch can be anoying.

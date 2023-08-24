@@ -36,6 +36,9 @@ This defines a level in a world, it has 3 callback functions as parameters. Thes
 
 # Random knowlege
 
+bunch of helper scripts for this [here](https://github.com/JaylyDev/ScriptAPI)
+This could be handy [jaylydb](https://github.com/JaylyDev/ScriptAPI/tree/stable/scripts/jaylydb)
+
 # Authors
 
 - [Bram Verhulst](https://github.com/brammie15)

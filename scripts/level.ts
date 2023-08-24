@@ -19,8 +19,8 @@ class Level {
 
   update() {
     if (this.levelCheckCallback() && !this.isCompleted) {
-      this.isCompleted = true;
       this.levelCompleteCallback();
+      this.isCompleted = true;
     }
   }
 
