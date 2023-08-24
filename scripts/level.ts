@@ -13,11 +13,11 @@ class Level {
     this.levelCheckCallback = levelCheckCallback;
   }
 
+  setup() {
+    this.levelSetupCallback();
+  }
+
   update() {
-    if (!this.isSetup) {
-      this.isSetup = true;
-      this.levelSetupCallback();
-    }
     if (this.levelCheckCallback() && !this.isCompleted) {
       this.isCompleted = true;
       this.levelCompleteCallback();

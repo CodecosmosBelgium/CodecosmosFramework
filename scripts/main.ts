@@ -10,10 +10,12 @@ const pupeteer = new Pupeteer(world);
 
 const level1: Level = new Level(
   () => {
-    pupeteer.setTitleTimed("Level 1", 1000);
+    pupeteer.setTitleTimed("Level 1", 500);
     pupeteer.setActionBar("Maak level 1");
+    world.sendMessage("Level 1 started");
   },
   () => {
+    world.sendMessage("setup: " + level1.isSetup);
     world.sendMessage("Level 1 completed");
     pupeteer.setTitleTimed("Level 1 completed", 1000);
     mindKeeper.set("currentLevel", "3");
@@ -42,6 +44,10 @@ system.runInterval(() => {
         //Volg het lichtspoor
         break;
       case "2":
+        level1.setup();
+        mindKeeper.set("currentLevel", "3");
+        break;
+      case "3":
         level1.update();
         break;
     }
@@ -53,9 +59,7 @@ world.afterEvents.worldInitialize.subscribe(({ propertyRegistry }) => {
   mindKeeper.registerToWorld(propertyRegistry);
 });
 
-world.afterEvents.blockPlace.subscribe((event) => {
-  mindKeeper.set("currentLevel", "2");
-});
+world.afterEvents.blockPlace.subscribe((event) => {});
 
 world.afterEvents.chatSend.subscribe((event) => {
   if (event.message.startsWith("!get")) {
