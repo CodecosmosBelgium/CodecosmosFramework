@@ -1,6 +1,6 @@
 import { BlockType, Vector3, world } from "@minecraft/server";
 import LevelCondition from "./AbstractCondition";
-import { Vector3ToString } from "../randomUtils";
+import { Vector3ToString } from "../vectorUtils";
 
 class BlockCondition extends LevelCondition {
   position: Vector3;
