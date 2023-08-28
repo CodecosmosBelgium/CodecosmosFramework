@@ -1,4 +1,5 @@
-import { Vector3, World, system } from "@minecraft/server";
+import { TicksPerSecond, TitleDisplayOptions, Vector3, World, system } from "@minecraft/server";
+import { delayedRun } from "./utils/waitUtil";
 
 class Pupeteer {
   world: World;
@@ -11,9 +12,9 @@ class Pupeteer {
     this.world.getPlayers().forEach((player) => {
       player.onScreenDisplay.setActionBar(message);
     });
-    system.runInterval(() => {
+    delayedRun(() => {
       this.clearActionBar();
-    }, duration);
+    }, duration * TicksPerSecond);
   }
 
   setActionBar(message: string): void {
@@ -24,11 +25,13 @@ class Pupeteer {
 
   setTitleTimed(message: string, duration: number): void {
     this.world.getPlayers().forEach((player) => {
-      player.onScreenDisplay.setTitle(message);
+      let options: TitleDisplayOptions = {
+        fadeInDuration: 20,
+        fadeOutDuration: 20,
+        stayDuration: duration * TicksPerSecond,
+      };
+      player.onScreenDisplay.setTitle(message, options);
     });
-    system.runInterval(() => {
-      this.clearTitle();
-    }, duration);
   }
 
   setTitle(message: string): void {

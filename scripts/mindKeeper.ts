@@ -33,6 +33,8 @@ class Mindkeeper {
 
   initialised: boolean = false;
 
+  debugLog: string[] = [];
+
   constructor(world: World) {
     this.world = world;
   }
@@ -43,6 +45,12 @@ class Mindkeeper {
 
   getStores() {
     return this.registerdStores;
+  }
+
+  printDebug() {
+    this.debugLog.forEach((t) => {
+      this.world.sendMessage(t);
+    });
   }
 
   registerToWorld(propertyRegistry: PropertyRegistry) {
@@ -63,12 +71,15 @@ class Mindkeeper {
       switch (this.registerdStores[i].getType()) {
         case StoreType.string:
           this.propertyManager.defineString(this.registerdStores[i].getName(), 255);
+          this.debugLog.push("registerd string" + this.registerdStores[i].getName());
           break;
         case StoreType.number:
           this.propertyManager.defineNumber(this.registerdStores[i].getName(), 0);
+          this.debugLog.push("registerd number" + this.registerdStores[i].getName());
           break;
         case StoreType.boolean:
           this.propertyManager.defineBoolean(this.registerdStores[i].getName(), false);
+          this.debugLog.push("registerd boolean" + this.registerdStores[i].getName());
           break;
       }
     }
@@ -93,7 +104,7 @@ class Mindkeeper {
       }
       return data;
     } catch (e) {
-      this.world.sendMessage(`Store ${store} is not defined`);
+      // this.world.sendMessage(`Store ${store} is not defined`);
       return undefined;
     }
   }

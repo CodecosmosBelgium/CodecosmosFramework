@@ -4,13 +4,20 @@ class Level {
   levelCompleteCallback: Function;
   levelCheckCallback: Function;
   levelSetupCallback: Function;
+  levelUpdateCallback: Function;
   isCompleted: boolean = false;
   isSetup: boolean = false;
 
-  constructor(levelSetupCallback: Function, levelCompleteCallback: Function, levelCheckCallback: Function) {
+  constructor(
+    levelSetupCallback: Function,
+    levelUpdateCallback: Function,
+    levelCompleteCallback: Function,
+    levelCheckCallback: Function
+  ) {
     this.levelSetupCallback = levelSetupCallback;
     this.levelCompleteCallback = levelCompleteCallback;
     this.levelCheckCallback = levelCheckCallback;
+    this.levelUpdateCallback = levelUpdateCallback;
   }
 
   setup() {
@@ -18,6 +25,7 @@ class Level {
   }
 
   update() {
+    this.levelUpdateCallback();
     if (this.levelCheckCallback() && !this.isCompleted) {
       this.levelCompleteCallback();
       this.isCompleted = true;

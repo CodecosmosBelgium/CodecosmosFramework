@@ -1,8 +1,8 @@
 import { BlockType, Vector3, world } from "@minecraft/server";
-import LevelCondition from "./AbstractCondition";
-import { Vector3ToString } from "../vectorUtils";
+import AbstractLevelCondition from "./AbstractCondition";
+import { Vector3ToString } from "../utils/vectorUtils";
 
-class BlockCondition extends LevelCondition {
+class BlockCondition extends AbstractLevelCondition {
   position: Vector3;
   blockType: BlockType;
 

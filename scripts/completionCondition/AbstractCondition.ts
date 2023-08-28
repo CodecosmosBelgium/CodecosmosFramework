@@ -1,9 +1,9 @@
-abstract class LevelCondition {
+abstract class AbstractLevelCondition {
   constructor() {}
 
   abstract checkCondition(): boolean;
 }
 
-export default LevelCondition;
+export default AbstractLevelCondition;
 
 //Interface could be better
