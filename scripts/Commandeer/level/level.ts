@@ -36,6 +36,7 @@ class Level {
     this.isCompleted = false;
   }
 }
+
 //nextlevel
 //mindkeeper
 //pupeteer

@@ -1,4 +1,4 @@
-import { TicksPerSecond, TitleDisplayOptions, Vector3, World, system } from "@minecraft/server";
+import { RawText, TicksPerSecond, TitleDisplayOptions, Vector3, World, system } from "@minecraft/server";
 import { delayedRun } from "./utils/waitUtil";
 
 class Pupeteer {
@@ -8,9 +8,17 @@ class Pupeteer {
     this.world = world;
   }
 
+  private getActualString(message: string): string | RawText {
+    if (message.startsWith("%")) {
+      const key = message.substring(1);
+      return { rawtext: [{ translate: key }] };
+    }
+    return message;
+  }
+
   setActionBarTimed(message: string, duration: number): void {
     this.world.getPlayers().forEach((player) => {
-      player.onScreenDisplay.setActionBar(message);
+      player.onScreenDisplay.setActionBar(this.getActualString(message));
     });
     delayedRun(() => {
       this.clearActionBar();
@@ -19,7 +27,7 @@ class Pupeteer {
 
   setActionBar(message: string): void {
     this.world.getPlayers().forEach((player) => {
-      player.onScreenDisplay.setActionBar(message);
+      player.onScreenDisplay.setActionBar(this.getActualString(message));
     });
   }
 
@@ -30,7 +38,7 @@ class Pupeteer {
         fadeOutDuration: 20,
         stayDuration: duration * TicksPerSecond,
       };
-      player.onScreenDisplay.setTitle(message, options);
+      player.onScreenDisplay.setTitle(this.getActualString(message), options);
     });
   }
 
@@ -42,7 +50,7 @@ class Pupeteer {
 
   updateSubtitle(message: string): void {
     this.world.getPlayers().forEach((player) => {
-      player.onScreenDisplay.updateSubtitle(message);
+      player.onScreenDisplay.updateSubtitle(this.getActualString(message));
     });
   }
 

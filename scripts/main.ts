@@ -7,19 +7,19 @@ import {
   ScreenDisplay,
   MolangVariableMap,
 } from "@minecraft/server";
-import Level from "./level/level";
-import { Mindkeeper, Store, StoreType } from "./mindKeeper";
-import BlockCondition from "./completionCondition/BlockCondition";
-import Pupeteer from "./pupeteer";
+import Level from "./Commandeer/level/level";
+import { Mindkeeper, Store, StoreType } from "./Commandeer/mindKeeper";
+import BlockCondition from "./Commandeer/completionCondition/BlockCondition";
+import Pupeteer from "./Commandeer/pupeteer";
 import { level1Conditions } from "./levelConditions/level1";
 import { level2Conditions } from "./levelConditions/level2";
-import { delayedRun } from "./utils/waitUtil";
+import { delayedRun } from "./Commandeer/utils/waitUtil";
 import { level3Conditions } from "./levelConditions/level3";
 import { levelExtraConditions } from "./levelConditions/levelExtra";
-import AbstractLevelCondition from "./completionCondition/AbstractCondition";
-import { LevelCondition } from "./level/levelTypes";
-import { TrailPoint, Trail } from "./trail/trailEngine";
-import { startTrail } from "./trail/trails/startTrail";
+import AbstractLevelCondition from "./Commandeer/completionCondition/AbstractCondition";
+import { LevelCondition } from "./Commandeer/level/levelTypes";
+import { TrailPoint, Trail } from "./Commandeer/trail/trailEngine";
+import { startTrail } from "./trails/startTrail";
 
 const mindKeeper = new Mindkeeper(world);
 const pupeteer = new Pupeteer(world);
@@ -37,21 +37,57 @@ const generateBlockCondition = (condition: LevelCondition): Function => {
   };
 };
 
+type Wall = {
+  startPos: Vector3;
+  endPos: Vector3;
+};
+
+let level1Wall: Wall = {
+  startPos: { x: 214, y: 74, z: 38 },
+  endPos: { x: 247, y: 77, z: 38 },
+};
+
+let level2Wall: Wall = {
+  startPos: { x: 214, y: 74, z: 31 },
+  endPos: { x: 247, y: 77, z: 31 },
+};
+
+let extraLevelWall: Wall = {
+  startPos: { x: 238, y: 74, z: 21 },
+  endPos: { x: 233, y: 78, z: 21 },
+};
+
+function setWall(wall: Wall, block: BlockType) {
+  world.getDimension("overworld").fillBlocks(wall.startPos, wall.endPos, block);
+}
+
+function startLevel(commandBlockPos: Vector3) {
+  world.getDimension("overworld").fillBlocks(commandBlockPos, commandBlockPos, MinecraftBlockTypes.redstoneBlock);
+}
+let noLevelCommandBlockPos: Vector3 = { x: 216, y: 72, z: 46 };
+
+let level1CommandBlockPos: Vector3 = { x: 216, y: 72, z: 45 };
+let level2CommandBlockPos: Vector3 = { x: 216, y: 72, z: 44 };
+let level3CommandBlockPos: Vector3 = { x: 216, y: 72, z: 43 };
+let levelExtraCommandBlockPos: Vector3 = { x: 216, y: 72, z: 42 };
+
 const level1: Level = new Level(
   () => {
     //setup
-    pupeteer.setTitleTimed("Level 1", 150);
-    world.sendMessage("Level 1 started");
+    pupeteer.setTitleTimed("message.level1.name", 2.5);
+    world.sendMessage("%message.level1.started");
+    startLevel(level1CommandBlockPos);
   },
   () => {
     //update
-    pupeteer.setActionBar("Maak level 1");
+    pupeteer.setActionBar("%message.level1.make");
   },
   () => {
     //after complete
     pupeteer.clearActionBar();
-    world.sendMessage("Level 1 completed");
-    pupeteer.setTitle("Level 1 completed");
+    world.sendMessage("%message.level1.complete");
+    pupeteer.setTitle("%message.level1.complete");
+    setWall(level1Wall, MinecraftBlockTypes.air);
     delayedRun(() => {
       mindKeeper.set("currentLevel", 4);
     }, 100);
@@ -62,16 +98,18 @@ const level1: Level = new Level(
 const level2: Level = new Level(
   () => {
     //Setblock for level 2
-    world.sendMessage("Level 1 started");
-    pupeteer.setTitleTimed("Level 2", 150);
+    world.sendMessage("%message.level2.started");
+    pupeteer.setTitleTimed("%message.level2.name", 2.5);
+    startLevel(level2CommandBlockPos);
   },
   () => {
-    pupeteer.setActionBar("Maak level 2");
+    pupeteer.setActionBar("%message.level2.make");
   },
   () => {
     pupeteer.clearActionBar();
-    world.sendMessage("Level 2 completed");
-    pupeteer.setTitleTimed("Level 2 completed", 150);
+    world.sendMessage("%message.level2.complete");
+    pupeteer.setTitleTimed("%message.level2.complete", 5);
+    setWall(level2Wall, MinecraftBlockTypes.air);
     delayedRun(() => {
       mindKeeper.set("currentLevel", 6);
     }, 100);
@@ -81,15 +119,18 @@ const level2: Level = new Level(
 
 const level3: Level = new Level(
   () => {
-    pupeteer.setTitleTimed("Level 3", 500);
+    world.sendMessage("%message.level3.started");
+    pupeteer.setTitleTimed("%message.level3.name", 5);
+    startLevel(level3CommandBlockPos);
   },
   () => {
-    pupeteer.setActionBar("Maak level 3");
+    pupeteer.setActionBar("%message.level3.make");
   },
   () => {
     pupeteer.clearActionBar();
-    world.sendMessage("Level 3 completed");
-    pupeteer.setTitleTimed("Level 3 completed", 150);
+    world.sendMessage("%message.level3.complete");
+    pupeteer.setTitleTimed("%message.level3.complete", 2.5);
+    setWall(extraLevelWall, MinecraftBlockTypes.air);
     delayedRun(() => {
       mindKeeper.set("currentLevel", 8);
     }, 100);
@@ -99,15 +140,16 @@ const level3: Level = new Level(
 
 const levelExtra: Level = new Level(
   () => {
-    pupeteer.setTitleTimed("Extra level", 500);
+    world.sendMessage("%message.level_extra.started");
+    pupeteer.setTitleTimed("%message.level_extra.name", 2.5);
+    startLevel(levelExtraCommandBlockPos);
   },
   () => {
-    pupeteer.setActionBar("WIP");
+    pupeteer.setActionBar("%message.level_extra.make");
   },
   () => {
     pupeteer.clearActionBar();
-    world.sendMessage("Level 3 completed");
-    pupeteer.setTitleTimed("Level 3 completed", 1000);
+    pupeteer.setTitleTimed("%message.level_extra.complete", 5);
     delayedRun(() => {
       mindKeeper.set("currentLevel", 10);
     }, 100);
@@ -124,9 +166,8 @@ system.runInterval(() => {
     switch (mindKeeper.get("currentLevel")) {
       case 1:
         trailStart.spawnNext();
-        pupeteer.setActionBar("Volg het lichtspoor");
+        pupeteer.setActionBar("%message.trail.follow");
         if (pupeteer.testForLocation({ x: 225, y: 74, z: 48 }, 2)) {
-          pupeteer.setActionBar("Goed gedaan!");
           mindKeeper.set("currentLevel", 2);
         }
         //Volg het lichtspoor
@@ -160,7 +201,7 @@ system.runInterval(() => {
         levelExtra.update();
         break;
       case 10:
-        pupeteer.setActionBar("Je hebt alle levels gehaald!");
+        pupeteer.setActionBar("%message.levels.completed");
         break;
     }
   }
@@ -196,31 +237,55 @@ world.afterEvents.chatSend.subscribe((event) => {
     level2.reset();
     level3.reset();
     levelExtra.reset();
+
+    setWall(level1Wall, MinecraftBlockTypes.barrier);
+    setWall(level2Wall, MinecraftBlockTypes.barrier);
+    setWall(extraLevelWall, MinecraftBlockTypes.barrier);
+
+    startLevel(noLevelCommandBlockPos);
   }
   if (event.message.startsWith("!test")) {
     mindKeeper.getStores().forEach((store) => {
       world.sendMessage(`${store.getName()} is ${store.getType()}`);
     });
   }
-  if (event.message.startsWith("!dingus")) {
-    world.sendMessage("dingus");
-    console.error("dingus");
-    console.log("dingus");
-    console.info("dingus");
-    console.warn("dingus");
-  }
-  if (event.message.startsWith("!setAction")) {
-    pupeteer.setActionBar("This is a test");
-  }
+
   if (event.message.startsWith("!dinga")) {
-    level1Conditions.conditions.forEach((condition) => {
-      world
-        .getDimension("overworld")
-        .fillBlocks(
-          { x: condition.position.x, y: condition.position.y, z: condition.position.z },
-          { x: condition.position.x, y: condition.position.y, z: condition.position.z },
-          MinecraftBlockTypes.diamondBlock
-        );
+    world.sendMessage("%message.level1.complete");
+  }
+
+  if (event.message.startsWith("!mariekeCommand")) {
+    const level = event.message.split(" ")[1];
+
+    switch (level) {
+      case "1":
+        mindKeeper.set("currentLevel", 2);
+        level1.reset();
+        break;
+      case "2":
+        setWall(level1Wall, MinecraftBlockTypes.air);
+        mindKeeper.set("currentLevel", 4);
+        level2.reset();
+        break;
+      case "3":
+        setWall(level1Wall, MinecraftBlockTypes.air);
+        setWall(level2Wall, MinecraftBlockTypes.air);
+        mindKeeper.set("currentLevel", 6);
+        level3.reset();
+        break;
+      case "4":
+        setWall(level1Wall, MinecraftBlockTypes.air);
+        setWall(level2Wall, MinecraftBlockTypes.air);
+        setWall(extraLevelWall, MinecraftBlockTypes.air);
+        mindKeeper.set("currentLevel", 8);
+        levelExtra.reset();
+        break;
+    }
+  }
+  if (event.message.startsWith("!trans")) {
+    world.getPlayers().forEach((player) => {
+      player.onScreenDisplay.setActionBar({ rawtext: [{ translate: "%message.level1.name" }] });
+      player.onScreenDisplay.setActionBar({ rawtext: [{ translate: "message.level1.name" }] });
     });
   }
 });

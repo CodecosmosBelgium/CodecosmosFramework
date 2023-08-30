@@ -1,5 +1,5 @@
 import { BlockType, MinecraftBlockTypes, Vector3 } from "@minecraft/server";
-import { LevelCondition } from "../level/levelTypes";
+import { LevelCondition } from "../Commandeer/level/levelTypes";
 
 let level3Conditions: LevelCondition = {
   conditions: [
@@ -38,6 +38,39 @@ let level3Conditions: LevelCondition = {
     {
       block: MinecraftBlockTypes.sapling,
       position: { x: 244, y: 74, z: 29 },
+    },
+
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 228, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 229, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 231, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 232, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 236, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 237, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 239, y: 74, z: 29 },
+    },
+    {
+      block: MinecraftBlockTypes.air,
+      position: { x: 240, y: 74, z: 29 },
     },
   ],
 };

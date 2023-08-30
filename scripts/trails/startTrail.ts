@@ -1,5 +1,5 @@
 import { Vector3 } from "@minecraft/server";
-import { TrailType } from "../trailTypes";
+import { TrailType } from "../Commandeer/trail/trailTypes";
 
 let startTrail: TrailType = {
   name: "startTrail",

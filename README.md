@@ -6,7 +6,7 @@ This is the readme for the typescript framework for minecraft education
 
 ## Puppeteer
 
-Puppeteer is a class that handles all the UI code for displaying messages to the player.
+Puppeteer is a class that handles all the UI code for displaying messages to the player. It also handles translations. see [Translations](#translations)
 
 ## MindKeeper
 
@@ -29,10 +29,16 @@ world.afterEvents.worldInitialize.subscribe(({ propertyRegistry }) => {
 This defines a level in a world, it has 3 callback functions as parameters. These functions should
 
 - define the setup logic
+- define the update (loop) logic (Used for actionbar mainly)
 - define the condition to pass the level
 - define the code to be run when the level is completed
 
 > There is a a AbstractCondition class included with a BlockCondition. This (convoluted) way you can define a BlockCondition in the function that checks if the level is complete.
+
+## Translations
+
+Translations work with a resource pack. It's the same as with regular resource packs. The way it works with Pupeteer is to set a message to the screen but add the "%" prefix to the key.
+So `pupeteer.setActionbar("%foo.bar)` will look for the key `foo.bar` in the resource pack and display that message.
 
 # Random knowlege
 
@@ -41,4 +47,4 @@ This could be handy [jaylydb](https://github.com/JaylyDev/ScriptAPI/tree/stable/
 
 # Authors
 
-- [Bram Verhulst](https://github.com/brammie15)
+- [Bram Verhulst](https://github.com/brammie15) :p

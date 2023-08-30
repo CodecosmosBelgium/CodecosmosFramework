@@ -1,0 +1,23 @@
+message.level1.name=Level 1
+message.level1.started=Level 1 is started!
+message.level1.complete=Level 1 is complete!
+message.level1.make=Make Level 1
+
+message.level2.name=Level 2
+message.level2.started=Level 2 is started!
+message.level2.complete=Level 2 is complete!
+message.level2.make=Make Level 2
+
+message.level3.name=Level 3
+message.level3.started=Level 3 is started!
+message.level3.complete=Level 3 is complete!
+message.level3.make=Make Level 3
+
+message.level_extra.name=Extra level
+message.level_extra.started=Extra level is started!
+message.level_extra.complete=Extra level is complete!
+message.level_extra.make=Make Extra level
+
+message.trail.follow=Follow the trail
+
+message.levels.completed=You have completed all levels!
