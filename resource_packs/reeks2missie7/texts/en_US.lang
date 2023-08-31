@@ -13,11 +13,18 @@ message.level3.started=Level 3 is started!
 message.level3.complete=Level 3 is complete!
 message.level3.make=Make Level 3
 
-message.level_extra.name=Extra level
-message.level_extra.started=Extra level is started!
-message.level_extra.complete=Extra level is complete!
-message.level_extra.make=Make Extra level
+message.level_extra1.name=Extra level
+message.level_extra1.started=Extra level is started!
+message.level_extra1.complete=Extra level is complete!
+message.level_extra1.make=Make Extra level
+
+message.level_extra2.name=Extra level
+message.level_extra2.started=Extra level is started!
+message.level_extra2.complete=Extra level is complete!
+message.level_extra2.make=Make Extra level
 
 message.trail.follow=Follow the trail
 
 message.levels.completed=You have completed all levels!
+
+tile.cc:poor_dirt.name=Poor Dirt

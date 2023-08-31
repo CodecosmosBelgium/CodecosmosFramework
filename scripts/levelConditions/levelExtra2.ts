@@ -1,7 +1,7 @@
 import { BlockType, MinecraftBlockTypes, Vector3 } from "@minecraft/server";
 import { LevelCondition } from "../Commandeer/level/levelTypes";
 
-let levelExtraConditions: LevelCondition = {
+let levelExtra2Conditions: LevelCondition = {
   conditions: [
     {
       block: MinecraftBlockTypes.sapling,
@@ -72,4 +72,4 @@ let levelExtraConditions: LevelCondition = {
   ],
 };
 
-export { levelExtraConditions };
+export { levelExtra2Conditions };

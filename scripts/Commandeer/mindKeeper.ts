@@ -108,6 +108,13 @@ class Mindkeeper {
       return undefined;
     }
   }
+
+  increment(store: string): void {
+    let data = this.get(store);
+    if (typeof data === "number") {
+      this.set(store, data + 1);
+    }
+  }
 }
 
 export { Mindkeeper, Store, StoreType };
