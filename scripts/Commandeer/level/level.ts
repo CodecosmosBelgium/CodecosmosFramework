@@ -25,6 +25,10 @@ class Level {
   }
 
   update() {
+    if (!this.isSetup) {
+      this.setup();
+      this.isSetup = true;
+    }
     this.levelUpdateCallback();
     if (this.levelCheckCallback() && !this.isCompleted) {
       this.levelCompleteCallback();

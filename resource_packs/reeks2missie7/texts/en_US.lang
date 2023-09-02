@@ -28,3 +28,54 @@ message.trail.follow=Follow the trail
 message.levels.completed=You have completed all levels!
 
 tile.cc:poor_dirt.name=Poor Dirt
+
+
+##npc names
+npc.name.help=Help
+npc.name.suki=§2Suki
+npc.name.bilal=§6Bilal
+npc.name.ramses=§dRamses
+npc.name.chanel=§9Chanel
+npc.name.paul=§7Paul
+npc.name.farah=§5Farah
+npc.name.turt=§aTurt
+npc.name.mo=§4Mo
+npc.name.al=Al
+
+button.thanks=Thanks!
+button.close=Close
+button.ok=Ok
+button.hello=Hello
+button.noprob=No problem
+
+message.talkto.ramses=Talk to Ramses
+message.talkto.chanel=Talk to Chanel
+
+ramses.greeting.1.text=Je bent aangekomen op de Jungleplaneet. Een prachtige planeet met veel problemen.
+ramses.greeting.1.button=welke dan?
+
+ramses.greeting.2.text=Grote bedrijven proberen zo veel mogelijk bomen in het regenwoud te kappen voor de productie van katoen, soja voor veevoeder en palmolie.
+ramses.greeting.2.button=wat kan ik doen?
+
+ramses.greeting.3.text=volg het lichtspoor naar Wetenschapper Chanel. Zij zal jou uitleggen wat je kan doen! 
+
+chanel.greeting.1.text=Het regenwoud is enorm belangrijk voor de aarde. Daarom moeten we proberen om zoveel mogelijk bomen terug te planten.
+chanel.greeting.1.button=Ok doen we!
+
+chanel.greeting.2.text=Bij de eerste oefening ga je op Myceleen blokken en grasblokken bomen planten.
+
+chanel.level1.text=goed gedaan! Het eerste level is compleet. Plant nu enkel een boom waar er een blok Myceleen én water staat.
+chanel.level1.button=let’s go!
+
+chanel.level2.text=Waaaw! Level 2 heb je ook kunnen oplossen! Bij level 3 mag je geen een boom planten wanneer er vuur is.
+chanel.level.2.button=ik doe mijn best!
+
+chanel.level3.1.text=Yes, je hebt alle levels kunnen volbrengen! Goed gedaan 
+chanel.level2.1.button=Bedankt!
+
+chanel.level3.2.text=Ga nu terug naar het leerplatform voor de extra opdracht! 
+
+chanel.levelExtra1.1.text=Gebruik nu al je kennis om deze uitdaging aan te gaan! In deze oefening moet je zowel ‘en’, ‘of’, ‘geen’ combineren.
+chanel.levelExtra1.1.button=Ik probeer het!
+
+chanel.levelExtra1.2.text=voor het eerste level moet je een boom planten als de agent niet dichtbij vuur is \nEN \nals de agent op een grasblok staat \nOF \nals de agent op een blok myceleen staat

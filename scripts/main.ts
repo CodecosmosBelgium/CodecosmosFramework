@@ -1,4 +1,12 @@
-import { world, system, MinecraftBlockTypes, Vector3, BlockType, ButtonPushAfterEvent } from "@minecraft/server";
+import {
+  world,
+  system,
+  MinecraftBlockTypes,
+  Vector3,
+  BlockType,
+  ButtonPushAfterEvent,
+  EntityQueryOptions,
+} from "@minecraft/server";
 import Level from "./Commandeer/level/level";
 import { Mindkeeper, Store, StoreType } from "./Commandeer/mindKeeper";
 import BlockCondition from "./Commandeer/completionCondition/BlockCondition";
@@ -45,9 +53,14 @@ let level2Wall: Wall = {
   endPos: { x: 247, y: 77, z: 31 },
 };
 
-let extraLevelWall: Wall = {
-  startPos: { x: 238, y: 74, z: 21 },
-  endPos: { x: 233, y: 78, z: 21 },
+let extraLevel2Wall: Wall = {
+  startPos: { x: 231, y: 74, z: 11 },
+  endPos: { x: 231, y: 71, z: -11 },
+};
+
+let nullWall: Wall = {
+  startPos: { x: -10, y: -10, z: -10 },
+  endPos: { x: -10, y: -10, z: -10 },
 };
 
 function setWall(wall: Wall, block: BlockType) {
@@ -64,166 +77,110 @@ let level2CommandBlockPos: Vector3 = { x: 216, y: 72, z: 44 };
 let level3CommandBlockPos: Vector3 = { x: 216, y: 72, z: 43 };
 let levelExtraCommandBlockPos: Vector3 = { x: 216, y: 72, z: 42 };
 
-const level1: Level = new Level(
-  () => {
-    //setup
-    pupeteer.setTitleTimed("message.level1.name", 2.5);
-    world.sendMessage("%message.level1.started");
-    startLevel(level1CommandBlockPos);
-  },
-  () => {
-    //update
-    pupeteer.setActionBar("%message.level1.make");
-  },
-  () => {
-    //after complete
-    pupeteer.clearActionBar();
-    world.sendMessage("%message.level1.complete");
-    pupeteer.setTitle("%message.level1.complete");
-    setWall(level1Wall, MinecraftBlockTypes.air);
-    delayedRun(() => {
-      mindKeeper.increment("currentLevel");
-    }, 100);
-  },
-  generateBlockCondition(level1Conditions)
+function generateLevel(
+  translationString: string,
+  levelCommandBlockPos: Vector3,
+  levelWall: Wall,
+  levelConditions: LevelCondition
+): Level {
+  const generatedLevel: Level = new Level(
+    () => {
+      //Setblock for level 2
+      world.sendMessage(`%message.${translationString}.started`);
+      pupeteer.setTitleTimed(`%message.${translationString}.name`, 2.5);
+      startLevel(levelCommandBlockPos);
+    },
+    () => {
+      pupeteer.setActionBar(`%message.${translationString}.make`);
+    },
+    () => {
+      pupeteer.clearActionBar();
+      world.sendMessage(`%message.${translationString}.complete`);
+      pupeteer.setTitleTimed(`%message.${translationString}.complete`, 5);
+      setWall(levelWall, MinecraftBlockTypes.air);
+      // delayedRun(() => {
+      //   mindKeeper.increment("currentLevel");
+      // }, 100);
+      mindKeeper.increment("currentLevel"); // debating between delayed and this (cuz npc's text doesnt update right away with delay? ask Marieke)
+    },
+    generateBlockCondition(levelConditions)
+  );
+  return generatedLevel;
+}
+
+const level1: Level = generateLevel("level1", level1CommandBlockPos, level1Wall, level1Conditions);
+const level2: Level = generateLevel("level2", level2CommandBlockPos, level2Wall, level2Conditions);
+const level3: Level = generateLevel("level3", level3CommandBlockPos, nullWall, level3Conditions);
+
+const levelExtra1: Level = generateLevel(
+  "level_extra1",
+  levelExtraCommandBlockPos,
+  extraLevel2Wall,
+  levelExtra1Conditions
 );
 
-const level2: Level = new Level(
-  () => {
-    //Setblock for level 2
-    world.sendMessage("%message.level2.started");
-    pupeteer.setTitleTimed("%message.level2.name", 2.5);
-    startLevel(level2CommandBlockPos);
-  },
-  () => {
-    pupeteer.setActionBar("%message.level2.make");
-  },
-  () => {
-    pupeteer.clearActionBar();
-    world.sendMessage("%message.level2.complete");
-    pupeteer.setTitleTimed("%message.level2.complete", 5);
-    setWall(level2Wall, MinecraftBlockTypes.air);
-    delayedRun(() => {
-      mindKeeper.increment("currentLevel");
-    }, 100);
-  },
-  generateBlockCondition(level2Conditions)
-);
-
-const level3: Level = new Level(
-  () => {
-    world.sendMessage("%message.level3.started");
-    pupeteer.setTitleTimed("%message.level3.name", 5);
-    startLevel(level3CommandBlockPos);
-  },
-  () => {
-    pupeteer.setActionBar("%message.level3.make");
-  },
-  () => {
-    pupeteer.clearActionBar();
-    world.sendMessage("%message.level3.complete");
-    pupeteer.setTitleTimed("%message.level3.complete", 2.5);
-    setWall(extraLevelWall, MinecraftBlockTypes.air);
-    delayedRun(() => {
-      mindKeeper.increment("currentLevel");
-    }, 100);
-  },
-  generateBlockCondition(level3Conditions)
-);
-
-const levelExtra1: Level = new Level(
-  () => {
-    world.sendMessage("%message.level_extra1.started");
-    pupeteer.setTitleTimed("%message.level_extra1.name", 2.5);
-    startLevel(levelExtraCommandBlockPos);
-  },
-  () => {
-    pupeteer.setActionBar("%message.level_extra1.make");
-  },
-  () => {
-    pupeteer.clearActionBar();
-    pupeteer.setTitleTimed("%message.level_extra1.complete", 5);
-    delayedRun(() => {
-      mindKeeper.increment("currentLevel");
-    }, 100);
-  },
-  generateBlockCondition(levelExtra1Conditions)
-);
-
-const levelExtra2: Level = new Level(
-  () => {
-    world.sendMessage("%message.level_extra2.started");
-    pupeteer.setTitleTimed("%message.level_extra2.name", 2.5);
-    startLevel(levelExtraCommandBlockPos);
-  },
-  () => {
-    pupeteer.setActionBar("%message.level_extra2.make");
-  },
-  () => {
-    pupeteer.clearActionBar();
-    pupeteer.setTitleTimed("%message.level_extra2.complete", 5);
-    delayedRun(() => {
-      mindKeeper.increment("currentLevel");
-    }, 100);
-  },
-  generateBlockCondition(levelExtra2Conditions)
-);
+const levelExtra2: Level = generateLevel("level_extra2", levelExtraCommandBlockPos, nullWall, levelExtra2Conditions);
 
 let trailStart: Trail = new Trail("startTrail", 2);
 trailStart.fromTrail(startTrail);
+
+function setNpcText(npcTag: string, sceneName: string) {
+  world.getDimension("overworld").runCommand(`/dialogue change @e[tag=${npcTag}] ${sceneName} @a`);
+}
 
 // Subscribe to an event that calls every Minecraft tick
 system.runInterval(() => {
   if (mindKeeper.initialised) {
     switch (mindKeeper.get("currentLevel")) {
       case 1:
+        //waiting for the player to talk to Ramses
+        pupeteer.setActionBar("%message.talkto.ramses");
+        break;
+      case 2:
         trailStart.spawnNext();
         pupeteer.setActionBar("%message.trail.follow");
         if (pupeteer.testForLocation({ x: 225, y: 74, z: 48 }, 2)) {
-          mindKeeper.set("currentLevel", 2);
+          mindKeeper.increment("currentLevel");
         }
         //Volg het lichtspoor
         break;
-      case 2:
-        level1.setup();
-        mindKeeper.increment("currentLevel");
-        break;
+
       case 3:
-        level1.update();
+        pupeteer.setActionBar("%message.talkto.chanel");
         break;
       case 4:
-        level2.setup();
-        mindKeeper.increment("currentLevel");
+        level1.update();
         break;
       case 5:
-        level2.update();
+        setNpcText("chanel1", "chanel_level1_complete");
+        pupeteer.setActionBar("%message.talkto.chanel");
         break;
       case 6:
-        level3.setup();
-        mindKeeper.increment("currentLevel");
+        level2.update();
         break;
       case 7:
+        setNpcText("chanel1", "chanel_level2_complete");
+        pupeteer.setActionBar("%message.talkto.chanel");
+        break;
+      case 8:
         level3.update();
         break;
-      //End of normal world
-      case 8:
-        pupeteer.setActionBar("%message.levels.completed");
       case 9:
-        levelExtra1.setup();
-        mindKeeper.increment("currentLevel");
+        setNpcText("chanel1", "chanel_level3_complete_1");
+        pupeteer.setActionBar("%message.talkto.chanel");
         break;
       case 10:
-        levelExtra1.update();
-        break;
+      //end of level
       case 11:
-        levelExtra2.setup();
-        mindKeeper.increment("currentLevel");
+        setNpcText("chanel2", "chanel_levelExtra1_greeting_1");
+        pupeteer.setActionBar("%message.talkto.chanel");
         break;
       case 12:
-        levelExtra2.update();
+        levelExtra1.update();
         break;
-      case 13:
-        pupeteer.setActionBar("%message.levels.completed");
+      case 13: //still need text to goto extra level 2
+        setNpcText("chanel2", "chanel_levelExtra1_complete");
+        pupeteer.setActionBar("%message.talkto.chanel");
         break;
     }
   }
@@ -237,12 +194,14 @@ world.afterEvents.worldInitialize.subscribe(({ propertyRegistry }) => {
 world.afterEvents.blockPlace.subscribe((event) => {});
 
 world.afterEvents.chatSend.subscribe((event) => {
-  if (event.message.startsWith("!get")) {
+  const command = event.message.split(" ")[0];
+  const args = event.message.split(" ").slice(1);
+  if (command === "!get") {
     const store = event.message.split(" ")[1];
     const value = mindKeeper.get(store);
     world.sendMessage(`Value of ${store} is ${value}`);
   }
-  if (event.message.startsWith("!set")) {
+  if (command === "!set") {
     const store = event.message.split(" ")[1];
     const value = event.message.split(" ")[2];
     const type = event.message.split(" ")[3];
@@ -262,52 +221,53 @@ world.afterEvents.chatSend.subscribe((event) => {
 
     setWall(level1Wall, MinecraftBlockTypes.barrier);
     setWall(level2Wall, MinecraftBlockTypes.barrier);
-    setWall(extraLevelWall, MinecraftBlockTypes.barrier);
+    setWall(extraLevel2Wall, MinecraftBlockTypes.barrier);
 
     startLevel(noLevelCommandBlockPos);
+
+    setNpcText("chanel1", "chanel_greeting_1");
   }
-  if (event.message.startsWith("!test")) {
+  if (event.message.startsWith("!listStores")) {
     mindKeeper.getStores().forEach((store) => {
       world.sendMessage(`${store.getName()} is ${store.getType()}`);
     });
   }
 
-  if (event.message.startsWith("!dinga")) {
-    world.sendMessage("%message.level1.complete");
+  if (event.message.startsWith("!setNpcText")) {
+    const npcTag = event.message.split(" ")[1];
+    const sceneName = event.message.split(" ")[2];
+    setNpcText(npcTag, sceneName);
   }
 
-  if (event.message.startsWith("!mariekeCommand")) {
-    const level = event.message.split(" ")[1];
+  if (command === "!startExtra") {
+    mindKeeper.set("currentLevel", 11);
+  }
+});
 
-    switch (level) {
-      case "1":
-        mindKeeper.set("currentLevel", 2);
-        level1.reset();
-        break;
-      case "2":
-        setWall(level1Wall, MinecraftBlockTypes.air);
-        mindKeeper.set("currentLevel", 4);
-        level2.reset();
-        break;
-      case "3":
-        setWall(level1Wall, MinecraftBlockTypes.air);
-        setWall(level2Wall, MinecraftBlockTypes.air);
-        mindKeeper.set("currentLevel", 6);
-        level3.reset();
-        break;
-      case "4":
-        setWall(level1Wall, MinecraftBlockTypes.air);
-        setWall(level2Wall, MinecraftBlockTypes.air);
-        setWall(extraLevelWall, MinecraftBlockTypes.air);
-        mindKeeper.set("currentLevel", 8);
-        levelExtra2.reset();
-        break;
+system.afterEvents.scriptEventReceive.subscribe((event) => {
+  if (event.id == "cc:startTrail") {
+    if (mindKeeper.get("currentLevel") == 1) {
+      mindKeeper.increment("currentLevel");
     }
   }
-  if (event.message.startsWith("!trans")) {
-    world.getPlayers().forEach((player) => {
-      player.onScreenDisplay.setActionBar({ rawtext: [{ translate: "%message.level1.name" }] });
-      player.onScreenDisplay.setActionBar({ rawtext: [{ translate: "message.level1.name" }] });
-    });
+  if (event.id == "cc:startLevel1") {
+    if (mindKeeper.get("currentLevel") == 3) {
+      mindKeeper.increment("currentLevel");
+    }
+  }
+  if (event.id == "cc:startLevel2") {
+    if (mindKeeper.get("currentLevel") == 5) {
+      mindKeeper.increment("currentLevel");
+    }
+  }
+  if (event.id == "cc:startLevel3") {
+    if (mindKeeper.get("currentLevel") == 7) {
+      mindKeeper.increment("currentLevel");
+    }
+  }
+  if (event.id == "cc:startLevelExtra1") {
+    if (mindKeeper.get("currentLevel") == 11) {
+      mindKeeper.increment("currentLevel");
+    }
   }
 });
