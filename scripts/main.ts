@@ -6,6 +6,7 @@ import {
   BlockType,
   ButtonPushAfterEvent,
   EntityQueryOptions,
+  Vector,
 } from "@minecraft/server";
 import Level from "./Commandeer/level/level";
 import { Mindkeeper, Store, StoreType } from "./Commandeer/mindKeeper";
@@ -75,7 +76,8 @@ let noLevelCommandBlockPos: Vector3 = { x: 216, y: 72, z: 46 };
 let level1CommandBlockPos: Vector3 = { x: 216, y: 72, z: 45 };
 let level2CommandBlockPos: Vector3 = { x: 216, y: 72, z: 44 };
 let level3CommandBlockPos: Vector3 = { x: 216, y: 72, z: 43 };
-let levelExtraCommandBlockPos: Vector3 = { x: 216, y: 72, z: 42 };
+let levelExtra1CommandBlockPos: Vector3 = { x: 216, y: 72, z: 42 };
+let levelExtra2CommandBlockPos: Vector3 = { x: 216, y: 72, z: 41 };
 
 function generateLevel(
   translationString: string,
@@ -97,7 +99,9 @@ function generateLevel(
       pupeteer.clearActionBar();
       world.sendMessage(`%message.${translationString}.complete`);
       pupeteer.setTitleTimed(`%message.${translationString}.complete`, 5);
-      setWall(levelWall, MinecraftBlockTypes.air);
+      if (levelWall != nullWall) {
+        setWall(levelWall, MinecraftBlockTypes.air);
+      }
       // delayedRun(() => {
       //   mindKeeper.increment("currentLevel");
       // }, 100);
@@ -114,12 +118,12 @@ const level3: Level = generateLevel("level3", level3CommandBlockPos, nullWall, l
 
 const levelExtra1: Level = generateLevel(
   "level_extra1",
-  levelExtraCommandBlockPos,
+  levelExtra1CommandBlockPos,
   extraLevel2Wall,
   levelExtra1Conditions
 );
 
-const levelExtra2: Level = generateLevel("level_extra2", levelExtraCommandBlockPos, nullWall, levelExtra2Conditions);
+const levelExtra2: Level = generateLevel("level_extra2", levelExtra2CommandBlockPos, nullWall, levelExtra2Conditions);
 
 let trailStart: Trail = new Trail("startTrail", 2);
 trailStart.fromTrail(startTrail);
@@ -172,15 +176,23 @@ system.runInterval(() => {
       case 10:
       //end of level
       case 11:
-        setNpcText("chanel2", "chanel_levelExtra1_greeting_1");
         pupeteer.setActionBar("%message.talkto.chanel");
         break;
       case 12:
         levelExtra1.update();
         break;
       case 13: //still need text to goto extra level 2
-        setNpcText("chanel2", "chanel_levelExtra1_complete");
+        setNpcText("chanel2", "chanel_level2Extra_greeting_1");
         pupeteer.setActionBar("%message.talkto.chanel");
+        break;
+      case 14:
+        levelExtra2.update();
+        break;
+      case 15:
+        setNpcText("chanel2", "chanel_level2Extra_complete_1");
+        pupeteer.setActionBar("%message.levels.completed");
+        break;
+      case 16: //finish ending
         break;
     }
   }
@@ -217,6 +229,7 @@ world.afterEvents.chatSend.subscribe((event) => {
     level1.reset();
     level2.reset();
     level3.reset();
+    levelExtra1.reset();
     levelExtra2.reset();
 
     setWall(level1Wall, MinecraftBlockTypes.barrier);
@@ -241,6 +254,7 @@ world.afterEvents.chatSend.subscribe((event) => {
 
   if (command === "!startExtra") {
     mindKeeper.set("currentLevel", 11);
+    setNpcText("chanel2", "chanel_levelExtra1_greeting_1");
   }
 });
 
@@ -265,8 +279,13 @@ system.afterEvents.scriptEventReceive.subscribe((event) => {
       mindKeeper.increment("currentLevel");
     }
   }
-  if (event.id == "cc:startLevelExtra1") {
+  if (event.id == "cc:startExtraLevel1") {
     if (mindKeeper.get("currentLevel") == 11) {
+      mindKeeper.increment("currentLevel");
+    }
+  }
+  if (event.id == "cc:startExtraLevel2") {
+    if (mindKeeper.get("currentLevel") == 13) {
       mindKeeper.increment("currentLevel");
     }
   }

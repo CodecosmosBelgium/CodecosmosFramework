@@ -13,15 +13,15 @@ message.level3.started=Level 3 is started!
 message.level3.complete=Level 3 is complete!
 message.level3.make=Make Level 3
 
-message.level_extra1.name=Extra level
-message.level_extra1.started=Extra level is started!
-message.level_extra1.complete=Extra level is complete!
-message.level_extra1.make=Make Extra level
+message.level_extra1.name=Extra level 1
+message.level_extra1.started=Extra level 1 is started!
+message.level_extra1.complete=Extra level 1 is complete!
+message.level_extra1.make=Make Extra level 1
 
-message.level_extra2.name=Extra level
-message.level_extra2.started=Extra level is started!
-message.level_extra2.complete=Extra level is complete!
-message.level_extra2.make=Make Extra level
+message.level_extra2.name=Extra level 2
+message.level_extra2.started=Extra level 2 is started!
+message.level_extra2.complete=Extra level 2 is complete!
+message.level_extra2.make=Make Extra level 2
 
 message.trail.follow=Follow the trail
 
@@ -47,6 +47,7 @@ button.close=Close
 button.ok=Ok
 button.hello=Hello
 button.noprob=No problem
+button.letsgo=Let's Go!
 
 message.talkto.ramses=Talk to Ramses
 message.talkto.chanel=Talk to Chanel
@@ -79,3 +80,11 @@ chanel.levelExtra1.1.text=Gebruik nu al je kennis om deze uitdaging aan te gaan!
 chanel.levelExtra1.1.button=Ik probeer het!
 
 chanel.levelExtra1.2.text=voor het eerste level moet je een boom planten als de agent niet dichtbij vuur is \nEN \nals de agent op een grasblok staat \nOF \nals de agent op een blok myceleen staat
+
+chanel.levelExtra2.1.text=Goed gedaan! Het laatste level is het moeilijkste! Ga de uitdaging aan!
+
+chanel.levelExtra2.2.text=voor het tweede level moet je een boom planten als de agent niet dichtbij vuur is \nEN \nals de agent op een grasblok staat \nOF \nPlant een boom als de agent niet dichtbij vuur is \nEN \nals de agent op een blok myceleen staat EN er water is naast de agent
+
+chanel.levelExtra2.text=De bomen zijn allemaal gepland, de jungle kan nu terug groeien. Het zal tientallen jaren duren voor de jungle zich terug herstelt, maar het is een goede stap in de juiste richting!
+
+message.allLevelsComplete=Je hebt alle levels gedaan!
